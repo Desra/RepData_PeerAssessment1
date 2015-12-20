@@ -1,196 +1,219 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
-  html_document:
-    keep_md: true
+html_document:
+keep_md: true
 ---
 
-
 ##Loading and preprocessing the data 
-1. Load the data  
-- Add ggplot2 library and set project working directory  
+
+
+**1. Load the data**
+
+- Step 1: Add ggplot2 library and set project working directory
+
 ```{r, echo=TRUE}
 library(ggplot2)
-
-message("... Setting Working Directory ...")
 directory <- c("E:\\Temp\\Coursera\\Reproducible Research\\Extra\\Course Project\\Week 2\\wd")
 setwd(directory)
+message("... Setting Working Directory ...")
 ```
 
-- Download and unzip data file
+  
+- Step 2: Download and unzip data file
+
 ```{r, echo=TRUE}
 fileName <- c("repdata_data_activity.zip")
 if(!file.exists(fileName)) {
-  message("... Downloading source data from site ...")
-  download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", fileName)
-  message("... Unzipping archived source data ...")
-  unzip(fileName)
+        download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip", fileName)
+        message("... Unzipping archived source data ...")
+        unzip(fileName)
 } else
-  message("... Source file already exists ...")
+        message("... Source file already exists ...")
 ```
 
+  
+- Step 3: Load data into a table
 
-- Load data into a table
 ```{r, echo=TRUE}
 if(any(dir()=="activity.csv")) {   
-  message("... Loading activity data ...")
-  message("... This will take a while ;)  ...")
-  activity_data <- read.csv("activity.csv", header = TRUE)
+        message("... Loading activity data ...")
+        message("... This will take a while ;)  ...")
+        activity_data <- read.csv("activity.csv", header = TRUE)
+        message("... Loading data completed ...")
 } else
-  message("... File activity.csv doesn't exist ...")
+        message("... File activity.csv doesn't exist ...")
 ```
 
+  
+**2. Process/transform the data into a format suitable for analysis**
 
-2. Process/transform the data into a format suitable for analysis
-None
-
-## What is mean total number of steps taken per day?**
-
-1. Calculate the total number of steps taken per day
 ```{r, echo=TRUE}
-activity_df <- data.frame(steps=activity_data[,1], datetaken=activity_data[,2], interval=activity_data[,3])
+activity_df <- data.frame(steps=activity_data[,1], 
+                          datetaken=activity_data[,2], 
+                          interval=activity_data[,3])
 activity_df2 <- na.omit(activity_df)
+```
+
+  
+## What is mean total number of steps taken per day?
+
+
+**1. Calculate the total number of steps taken per day**
+
+```{r, echo=TRUE}
 mean_df <- mean(activity_df2$steps)
 
-message("... Get total number of steps taken by date ...")
-aggregateSumStepsPerDay<- with(activity_df2,aggregate(activity_df2$steps, by=list(activity_df2$datetaken), sum))
-
-names(aggregateSumStepsPerDay) <- c("dates","steps")
+aggregateSumStepsPerDay <- with(activity_df2, aggregate(activity_df2$steps, 
+                                                        by=list(activity_df2$datetaken), 
+                                                        sum))
 ```
 
-2. Make a histogram of the total number of steps taken each day
-```{r, echo=FALSE}
-message("... Create a histogram plot ...")
+
+**2. Make a histogram of the total number of steps taken each day**
+
+```{r, echo=FALSE, fig.height=4}
+names(aggregateSumStepsPerDay) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay, aes(x = steps))
 g + geom_histogram(fill="blue", binwidth=1000) +
-  xlab("Dates") +
-  ylab("Total number of steps ") +
-  ggtitle("Total number of steps taken per day")
-
-message("... Histogram creation completed!  ...")
+        xlab("Dates") +
+        ylab("Total number of steps ") +
+        ggtitle("Total number of steps taken per day")
 ```
 
-3. Calculate and report the mean and median of the total number of steps taken per day
 
-```{r, echo=FALSE}
-message("... Get mean of the total number of steps taken per day ...")
-meanStepsPerDay <-mean(aggregateSumStepsPerDay$steps)
+**3. Calculate and report the mean and median of the total number of steps taken per day**
 
-
-message("... Get median of the total number of steps taken per day ...")
-medianStepsPerDay <-median(aggregateSumStepsPerDay$steps)
+```{r, echo=TRUE}
+meanStepsPerDay <- mean(aggregateSumStepsPerDay$steps)
+medianStepsPerDay <- median(aggregateSumStepsPerDay$steps)
 ```
+
+
+- Mean: **`r meanStepsPerDay`**
+- Median: **`r medianStepsPerDay`**
+
 
 ## What is the average daily activity pattern?
-1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-- Get average number of steps taken per interval
+
+**1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)**
+
+
+- Step 1: Get average number of steps taken per interval
+
 ```{r, echo=TRUE}
-message("... Get average number of steps taken per interval ...")
-aggregateMeanStepsPerInterval<- with(activity_df2,aggregate(activity_df2$steps, by=list(activity_df2$interval), mean))
-names(aggregateMeanStepsPerInterval) <- c("interval","steps")
+aggregateMeanStepsPerInterval <- with(activity_df2,aggregate(activity_df2$steps, 
+                                                             by=list(activity_df2$interval), 
+                                                             mean))
 ```
 
-- Plot the data using time series plot (base plot system)  
-```{r, echo=TRUE}
-message("... Create time series plot  ...")
-png("plot2.png", width=640, height=480)
+- Step 2: Plot the data using time series plot (base plot system)  
+
+```{r, echo=FALSE, fig.height=4}
+names(aggregateMeanStepsPerInterval) <- c("interval","steps")
 plot(aggregateMeanStepsPerInterval,
      type="l",  
      ylab="The average number of steps taken",
      xlab="5-minute interval",
      main="The average daily activity pattern",
      col="Blue")
-dev.off()
-message("... Time series plot creation completed!  ...")
 ```
 
-2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
+
+**2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?**
+
+
 ```{r, echo=TRUE}
-maxSteps<-max(aggregateMeanStepsPerInterval$steps)
+maxSteps <- max(aggregateMeanStepsPerInterval$steps)
 maxStepsIndex <- which.max(aggregateMeanStepsPerInterval$steps)
 maxIntervalSteps <- aggregateMeanStepsPerInterval$interval[maxStepsIndex]
 ```
 
+- Interval with maximum number of steps: **`r maxIntervalSteps`**
+
+
 ## Imputing missing values
 
-1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+**1. Calculate and report the total number of missing values in the dataset**
+
 ```{r, echo=TRUE}
-message("... Get total number of missing values in the dataset ...")
 numMissingRecord <- nrow(activity_df) - nrow(activity_df2)
 ```
+- Total number of records with missing values: **`r numMissingRecord`**
 
-2.Devise a strategy for filling in all of the missing values in the dataset.  
-- Strategy use: Use the mean for that 5-minute interval to fill the missing value  
+
+**2.Devise a strategy for filling in all of the missing values in the dataset.**
+
+- Strategy: *Use the mean for that 5-minute interval to fill the missing value* 
+
 ```{r, echo=TRUE}
-message("... Replace each interval containing NAs with the mean of that interval  ...")
-message("... This will take a while ;)  ...")
 newStepsData <- numeric()
 for (i in 1:nrow(activity_df)) 
-  {
-    temp <- activity_df[i, ]
-  if (is.na(temp$steps)) 
-    {
-        new_steps <- subset(aggregateMeanStepsPerInterval, interval == temp$interval)$steps
-    } else 
-    { 
-        new_steps <- temp$steps
-    }
-  newStepsData <- c(newStepsData, new_steps)
+{
+        temp <- activity_df[i, ]
+        if (is.na(temp$steps)) 
+        {
+                new_steps <- subset(aggregateMeanStepsPerInterval, interval == temp$interval)$steps
+        } else 
+        { 
+                new_steps <- temp$steps
+        }
+        newStepsData <- c(newStepsData, new_steps)
 }
-message("... NAs replacement completed ! ...")
 ```
 
-3. Create a new dataset that is equal to the original dataset but with the missing data filled in.  
-```{r}
-message("... Create new dataset containing the filled steps data ...")
-
-activity_df_new <- data.frame(steps=newStepsData, datetaken=activity_df$datetaken, interval=activity_df$interval)
+**3. Create a new dataset that is equal to the original dataset but with the missing data filled in.**  
+```{r, recho=TRUE}
+activity_df_new <- data.frame(steps=newStepsData, 
+                              datetaken=activity_df$datetaken, 
+                              interval=activity_df$interval)
 ```
 
 
-4.Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
+**4.Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day.**
 
 - Step 1: Get total average number of steps taken per day from the new dataset
+
 ```{r, echo=TRUE}
-message("... Get total number of steps taken by date from the new dataset...")
 aggregateSumStepsPerDay2<- with(activity_df_new,aggregate(steps, by=list(datetaken), sum))
-names(aggregateSumStepsPerDay2) <- c("dates","steps")
 ```
 
 - Step 2: Plot the filled data using histogram 
-```{r, echo=TRUE}
-message("... Create a histogram plot ...")
-png("plot3.png", width = 640, height = 480)
+
+```{r, echo=FALSE, fig.height= 4}
+names(aggregateSumStepsPerDay2) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay2, aes(x = steps))
 g + geom_histogram(fill="red", binwidth=1000) +
-  xlab("Dates") +
-  ylab("Total number of steps ") +
-  ggtitle("Total number of steps taken per day ")
-dev.off()
-
-message("... Histogram creation completed!  ...")
+        xlab("Dates") +
+        ylab("Total number of steps ") +
+        ggtitle("Total number of steps taken per day ")
 ```
 
 - Step 3: Calculate and report the mean and median of the total number of steps taken per day
-```{r}
-message("... Get mean of the total number of steps taken per day ...")
+```{r, echo=TRUE}
 meanStepsPerDay2 <-mean(aggregateSumStepsPerDay2$steps)
-print(meanStepsPerDay2)
-
-message("... Get median of the total number of steps taken per day ...")
 medianStepsPerDay2 <-median(aggregateSumStepsPerDay2$steps)
 ```
 
-- Step 4: Answer the following questions
-*Do these values differ from the estimates from the first part of the assignment?*  
-**No**  
-*What is the impact of imputing missing data on the estimates of the total daily number of steps?*
+- Mean: **`r meanStepsPerDay2`**
+- Median: **`r medianStepsPerDay2`**
 
 
-## Are there differences in activity patterns between weekdays and weekends?**  
-1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+**Do these values differ from the estimates from the first part of the assignment?**  
+*No*
 
+
+**What is the impact of imputing missing data on the estimates of the total daily number of steps?**  
+*Not much*
+
+
+## Are there differences in activity patterns between weekdays and weekends? 
+
+**1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.**
+
+
+- Step 1: Determine whether  given date is a weekday or weekend day
 
 ```{r, echo=TRUE}
 
@@ -201,40 +224,35 @@ day <- weekdays(activity_df4$datetaken)
 level <- vector()
 
 for (i in 1:nrow(activity_df4)) {
-  if (day[i] == "Saturday") 
-    {
-      level[i] <- "Weekend"
-    } else if (day[i] == "Sunday") {
-      level[i] <- "Weekend"
-    } else {
-      level[i] <- "Weekday"
-    }
+        if (day[i] == "Saturday") 
+        {
+                level[i] <- "Weekend"
+        } else if (day[i] == "Sunday") {
+                level[i] <- "Weekend"
+        } else {
+                level[i] <- "Weekday"
+        }
 }
+```
+
+
+- Step 2: Create a new factor variable in the dataset with two levels 
+
+```{r, echo=TRUE}
 
 activity_df4$level <- level
 activity_df4$level <- factor(activity_df4$level)
-```
-
-- Step 2: Create a new factor variable in the dataset with two levels 
-```{r, echo=TRUE}
 aggregateSumStepsPerDay3<- with(activity_df4,aggregate(steps, by=list(interval,level), mean))
-names(aggregateSumStepsPerDay3) <- c("interval", "daylevel", "steps")
 ```
 
 
-2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).
-
+**2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).**
 
 ```{r, echo=FALSE, fig.height=4}
-message("... Create plot ...")
-png("plot4.png", width=640, height=480)
-
+names(aggregateSumStepsPerDay3) <- c("interval", "daylevel", "steps")
 ggplot(aggregateSumStepsPerDay3, aes(interval, steps)) + 
-  geom_line(color="blue") + 
-  facet_grid(daylevel ~.) +
-  xlab("5-minute interval") + 
-  ylab("The average number of steps taken")
-dev.off()
-
-message("... Panel plot creation completed!  ...")
+        geom_line(color="blue") + 
+        facet_grid(daylevel ~.) +
+        xlab("5-minute interval") + 
+        ylab("The average number of steps taken")
 ```
