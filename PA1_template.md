@@ -7,9 +7,7 @@
 
 This report is created to fulfill the requirements for the Coursera assignment "Reproducible Research: Peer Assessment 1" and is written in a single R Markdown document that is processed by knitr and later transformed into an HTML file. The dataset that is used for this assignment is stored in a comma-separated-value (CSV) file, found in the same github repository with the report . It consists of two months of data from a personal activity monitoring device that was collected between October 2012 and November 2012 and includes the number of steps taken in 5 minute intervals each day.
 
-The report contains chunk of R codes, results and figure/charts in an attempt the answer the questions featured in the assignment with regards to the dataset.
-
-
+The report contains chunk of R codes, results and figure/charts in an attempt the answer the questions featured in the assignment with regards to the dataset.  
 
 
 ##Loading and preprocessing the data 
@@ -114,7 +112,7 @@ aggregateSumStepsPerDay <- with(activity_df2, aggregate(activity_df2$steps,
 ```r
 names(aggregateSumStepsPerDay) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay, aes(x = steps))
-g + geom_histogram(fill="blue", binwidth=1000) +
+g + geom_histogram(fill="magenta", binwidth=1000) +
         xlab("Dates") +
         ylab("Total number of steps ") +
         ggtitle("Total number of steps taken per day")
@@ -246,7 +244,7 @@ Step 2: Plot the filled data using histogram
 ```r
 names(aggregateSumStepsPerDay2) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay2, aes(x = steps))
-g + geom_histogram(fill="red", binwidth=1000) +
+g + geom_histogram(fill="green", binwidth=1000) +
         xlab("Dates") +
         ylab("Total number of steps ") +
         ggtitle("Total number of steps taken per day ")
