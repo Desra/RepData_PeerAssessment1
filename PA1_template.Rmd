@@ -89,7 +89,7 @@ aggregateSumStepsPerDay <- with(activity_df2, aggregate(activity_df2$steps,
 ###
 **2. Make a histogram of the total number of steps taken each day**  
 
-```{r, echo=TRUE, fig.height=4}
+```{r, echo=TRUE, fig.height=4, results="hide", fig.show="hide"}
 names(aggregateSumStepsPerDay) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay, aes(x = steps))
 g + geom_histogram(fill="blue", binwidth=1000) +
@@ -97,8 +97,9 @@ g + geom_histogram(fill="blue", binwidth=1000) +
         ylab("Total number of steps ") +
         ggtitle("Total number of steps taken per day")
 ```
-
-![Figure taken from path /figure/](/figure/unnamed-chunk-7-1.png)
+###  
+**Image embedded from path /figure/**
+![Image](/figure/unnamed-chunk-7-1.png)
 
 ###
 **3. Calculate and report the mean and median of the total number of steps taken per day**  
@@ -130,7 +131,7 @@ aggregateMeanStepsPerInterval <- with(activity_df2,aggregate(activity_df2$steps,
 ###  
 Step 2: Plot the data using time series plot (base plot system)  
 
-```{r, echo=TRUE, fig.height=4}
+```{r, echo=TRUE, fig.height=4, results="hide", fig.show="hide"}
 names(aggregateMeanStepsPerInterval) <- c("interval","steps")
 plot(aggregateMeanStepsPerInterval,
      type="l",  
@@ -139,7 +140,9 @@ plot(aggregateMeanStepsPerInterval,
      main="The average daily activity pattern",
      col="Blue")
 ```
-![Figure taken from path /figure/](/figure/unnamed-chunk-10-1.png)
+###  
+**Image embedded from path /figure/**
+![Image](/figure/unnamed-chunk-10-1.png)
 
 ###
 **2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?**  
@@ -204,12 +207,12 @@ Step 1: Get total average number of steps taken per day from the new dataset
 ```{r, echo=TRUE}
 aggregateSumStepsPerDay2<- with(activity_df_new,aggregate(steps, by=list(datetaken), sum))
 ```
-![Figure taken from path /figure/](/figure/unnamed-chunk-16-1.png)
+
 
 ###
 Step 2: Plot the filled data using histogram  
 
-```{r, echo=TRUE, fig.height= 4}
+```{r, echo=TRUE, fig.height= 4, results="hide", fig.show="hide"}
 names(aggregateSumStepsPerDay2) <- c("dates","steps")
 g <- ggplot(aggregateSumStepsPerDay2, aes(x = steps))
 g + geom_histogram(fill="red", binwidth=1000) +
@@ -217,6 +220,9 @@ g + geom_histogram(fill="red", binwidth=1000) +
         ylab("Total number of steps ") +
         ggtitle("Total number of steps taken per day ")
 ```
+###  
+**Image embedded from path /figure/**
+![Image](/figure/unnamed-chunk-16-1.png)
 
 ###
 Step 3: Calculate and report the mean and median of the total number of steps taken per day  
@@ -279,7 +285,7 @@ aggregateSumStepsPerDay3<- with(activity_df4,aggregate(steps, by=list(interval,l
 ###
 **2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis).**  
 
-```{r, echo=TRUE, fig.height=4}
+```{r, echo=TRUE, fig.height=4, results="hide", fig.show="hide"}
 names(aggregateSumStepsPerDay3) <- c("interval", "daylevel", "steps")
 ggplot(aggregateSumStepsPerDay3, aes(interval, steps)) + 
         geom_line(color="blue") + 
@@ -287,4 +293,6 @@ ggplot(aggregateSumStepsPerDay3, aes(interval, steps)) +
         xlab("5-minute interval") + 
         ylab("The average number of steps taken")
 ```
-![Figure taken from path /figure/](/figure/unnamed-chunk-20-1.png)
+###  
+**Image embedded from path /figure/**
+![Image](/figure/unnamed-chunk-20-1.png)
