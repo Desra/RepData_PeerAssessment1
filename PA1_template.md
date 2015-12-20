@@ -10,6 +10,8 @@ This report is created to fulfill the requirements for the Coursera assignment "
 The report contains chunk of R codes, results and figure/charts in an attempt the answer the questions featured in the assignment with regards to the dataset.
 
 
+
+
 ##Loading and preprocessing the data 
 
 **1. Load the data**  
@@ -120,6 +122,7 @@ g + geom_histogram(fill="blue", binwidth=1000) +
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
+
 ###
 **3. Calculate and report the mean and median of the total number of steps taken per day**  
 
@@ -164,6 +167,7 @@ plot(aggregateMeanStepsPerInterval,
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+
 
 ###
 **2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?**  
@@ -234,6 +238,7 @@ Step 1: Get total average number of steps taken per day from the new dataset
 aggregateSumStepsPerDay2<- with(activity_df_new,aggregate(steps, by=list(datetaken), sum))
 ```
 
+
 ###
 Step 2: Plot the filled data using histogram  
 
@@ -248,6 +253,7 @@ g + geom_histogram(fill="red", binwidth=1000) +
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-16-1.png) 
+
 
 ###
 Step 3: Calculate and report the mean and median of the total number of steps taken per day  
